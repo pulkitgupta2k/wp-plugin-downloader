@@ -128,4 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 cookie_gpl.txt
-cookie_wproto.txt
+wproto_creds.py
