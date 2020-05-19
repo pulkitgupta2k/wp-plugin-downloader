@@ -38,5 +38,3 @@ def upload_driver():
         name = name.replace("plugins\\", "")
         print(name)
         upload_plugin(name)
-
-upload_driver()
