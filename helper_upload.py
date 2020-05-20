@@ -5,9 +5,9 @@ import glob
 import time
 from wproto_creds import *
 
-driver = webdriver.Chrome('./chromedriver')
 
-def login(user, passwd):
+
+def login(user, passwd, driver):
     driver.get("https://vm1.wproto.net/admin/home/")
     username = driver.find_element_by_id("login_name")
     password = driver.find_element_by_id("passwd")
@@ -16,7 +16,7 @@ def login(user, passwd):
     submit = driver.find_element_by_xpath("//button[@type='submit']")
     submit.click()
 
-def upload_plugin(name):
+def upload_plugin(name, driver):
     driver.get("https://vm1.wproto.net/modules/wp-toolkit/index.php/index/plugins")
     upload_plugin = driver.find_element_by_xpath("//button[@data-test-id='toolbar-upload-button']")
     upload_plugin.click()
@@ -31,10 +31,11 @@ def upload_plugin(name):
             break
 
 def upload_driver():
-    login(user, passwd)
+    driver = webdriver.Chrome('./chromedriver')
+    login(user, passwd, driver)
     name = []
     names = glob.glob("plugins/*.zip")
     for name in names:
         name = name.replace("plugins\\", "")
         print(name)
-        upload_plugin(name)
+        upload_plugin(name, driver)
