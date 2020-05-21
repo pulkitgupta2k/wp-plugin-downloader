@@ -129,7 +129,8 @@ def download_driver_themes():
     download_infs = download_infs['data']
     for download_inf in download_infs:
         pprint(download_inf[0])
-        download_file_themes(download_inf[1], download_inf[0])
+        if not download_inf[1] == "":
+            download_file_themes(download_inf[1], download_inf[0])
 
 
 # download_driver_themes()
