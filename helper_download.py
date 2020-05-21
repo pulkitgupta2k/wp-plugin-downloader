@@ -123,8 +123,17 @@ def download_driver():
         pprint(download_inf[0])
         download_file(download_inf[1], download_inf[0])
 
-make_downlinks_json_themes()
+def download_driver_themes():
+    with open('download_links_themes.json', 'r') as f:
+        download_infs = json.load(f)
+    download_infs = download_infs['data']
+    for download_inf in download_infs:
+        pprint(download_inf[0])
+        download_file_themes(download_inf[1], download_inf[0])
 
+
+# download_driver_themes()
+# download_file_themes("https://www.gplfamily.com/?protected_file=8ca52122-525c-4bed-8c01-184001c5a60b&product_id=9174", "adforest-classified-ads-wordpress-theme")
 # make_themes_json()
 # get_all_plugins("https://www.gplfamily.com/product-category/wordpress-themes/")
 
