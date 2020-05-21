@@ -48,11 +48,22 @@ def get_download_link(page_link):
     try:
         download_link = soup.findAll("a", {"class": "yith-wcmbs-download-button"})[1]['href']
     except:
-        download_link = soup.find("a", {"class": "yith-wcmbs-download-button"})['href']
+        try:
+            download_link = soup.find("a", {"class": "yith-wcmbs-download-button"})['href']
+        except:
+            return ""
     return download_link
 
 def download_file(link, name):
     name = "plugins/{}.zip".format(name)
+    with open("cookie_gpl.txt") as f:
+        cookie = f.readline()
+    headers = {'User-agent': 'Mozilla/5.0', 'Cookie': cookie, 'DNT': '1'}
+    d_file = requests.get(link, headers = headers)
+    open(name, "wb").write(d_file.content)
+
+def download_file_themes(link, name):
+    name = "themes/{}.zip".format(name)
     with open("cookie_gpl.txt") as f:
         cookie = f.readline()
     headers = {'User-agent': 'Mozilla/5.0', 'Cookie': cookie, 'DNT': '1'}
