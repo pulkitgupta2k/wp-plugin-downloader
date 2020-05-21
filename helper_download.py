@@ -65,6 +65,12 @@ def make_plugins_json():
     with open('plugins.json', 'w') as f:
         json.dump(plugins, f)
 
+def make_themes_json():
+    themes = {}
+    themes['link'] = get_all_plugins("https://www.gplfamily.com/product-category/wordpress-themes/")
+    with open('themes.json', 'w') as f:
+        json.dump(themes, f)
+
 def make_downlinks_json():
     download_file = {}
     download_file["data"] = []
@@ -82,6 +88,22 @@ def make_downlinks_json():
     with open('download_links.json', 'w') as f:
         json.dump(download_file, f)
 
+def make_downlinks_json_themes():
+    download_file = {}
+    download_file["data"] = []
+    with open('themes.json', 'r') as f:
+        plugins = json.load(f)
+    for plugin in plugins['link']:
+        download_link = get_download_link(plugin)
+        name = plugin.replace("https://www.gplfamily.com/shop/", "").strip("/")
+        product = []
+        product.append(name)
+        product.append(download_link)
+        pprint(product)
+        download_file['data'].append(product)
+    with open('download_links_themes.json', 'w') as f:
+        json.dump(download_file, f)
+
 def download_driver():
     with open('download_links.json', 'r') as f:
         download_infs = json.load(f)
@@ -89,6 +111,11 @@ def download_driver():
     for download_inf in download_infs:
         pprint(download_inf[0])
         download_file(download_inf[1], download_inf[0])
+
+make_downlinks_json_themes()
+
+# make_themes_json()
+# get_all_plugins("https://www.gplfamily.com/product-category/wordpress-themes/")
 
 # print(get_download_link("https://www.gplfamily.com/shop/anywhere-elementor-pro-wordpress-plugin/"))
 
