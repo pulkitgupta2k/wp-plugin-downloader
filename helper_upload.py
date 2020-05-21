@@ -4,7 +4,7 @@ import os
 import glob
 import time
 from wproto_creds import *
-
+import shutil
 
 
 def login(user, passwd, driver):
@@ -29,7 +29,12 @@ def upload_plugin(name, driver):
             driver.find_element_by_xpath("//input[@type='file']").is_displayed()
         except:
             break
-
+        try:
+            driver.find_element_by_xpath("//span[@class='pul-form-field__error']")
+            shutil.move("plugins/{}".format(name), "rejected_plugins/{}".format(name))
+            break
+        except:
+            pass
 def upload_driver():
     driver = webdriver.Chrome('./chromedriver')
     login(user, passwd, driver)
@@ -39,3 +44,8 @@ def upload_driver():
         name = name.replace("plugins\\", "")
         print(name)
         upload_plugin(name, driver)
+
+driver = webdriver.Chrome('./chromedriver')
+login(user, passwd, driver)
+upload_plugin("admin-menu-editor-pro.zip", driver)
+upload_plugin("5sec-snow.zip", driver)

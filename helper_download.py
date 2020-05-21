@@ -45,7 +45,10 @@ def get_all_plugins(link):
 def get_download_link(page_link):
     html = getHTML(page_link)
     soup = BeautifulSoup(html, "html.parser")
-    download_link = soup.find("a", {"class": "yith-wcmbs-download-button"})['href']
+    try:
+        download_link = soup.findAll("a", {"class": "yith-wcmbs-download-button"})[1]['href']
+    except:
+        download_link = soup.find("a", {"class": "yith-wcmbs-download-button"})['href']
     return download_link
 
 def download_file(link, name):
@@ -86,6 +89,8 @@ def download_driver():
     for download_inf in download_infs:
         pprint(download_inf[0])
         download_file(download_inf[1], download_inf[0])
+
+# print(get_download_link("https://www.gplfamily.com/shop/anywhere-elementor-pro-wordpress-plugin/"))
 
 # make_downlinks_json()
 # download_file("https://www.gplfamily.com/?protected_file=b12bd9a0-24fc-4692-922b-f6e0b5beac19&product_id=784", "test")
