@@ -45,7 +45,7 @@ def upload_driver():
         print(name)
         upload_plugin(name, driver)
 
-driver = webdriver.Chrome('./chromedriver')
-login(user, passwd, driver)
-upload_plugin("admin-menu-editor-pro.zip", driver)
-upload_plugin("5sec-snow.zip", driver)
+# driver = webdriver.Chrome('./chromedriver')
+# login(user, passwd, driver)
+# upload_plugin("admin-menu-editor-pro.zip", driver)
+# upload_plugin("5sec-snow.zip", driver)

@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 cookie_gpl.txt
 wproto_creds.py
+plugins/
+rejected_plugins/
