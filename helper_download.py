@@ -3,6 +3,7 @@ import requests
 from pprint import pprint
 import json
 
+
 def getHTML(link):
     with open("cookie_gpl.txt") as f:
         cookie = f.readline()
@@ -10,6 +11,7 @@ def getHTML(link):
     req = requests.get(link, headers=headers)
     html = req.content
     return html
+
 
 def single_page_plugins(link):
     links = []
@@ -20,9 +22,9 @@ def single_page_plugins(link):
     products = products.findAll("div", {"class": "product-small box"})
     for product in products:
         links.append(product.find("a")['href'])
-    
+
     try:
-        next_page = soup.find("a",{"class": "next page-number"})['href']
+        next_page = soup.find("a", {"class": "next page-number"})['href']
     except:
         pass
 
@@ -31,56 +33,69 @@ def single_page_plugins(link):
     ret["next_page"] = next_page
     return ret
 
+
 def get_all_plugins(link):
     plugins = []
     while True:
         page_plugin = single_page_plugins(link)
         plugins.extend(page_plugin['links'])
-        pprint(page_plugin['links'])
+        # pprint(page_plugin['links'])
         if page_plugin['next_page'] == '':
             break
         link = page_plugin['next_page']
     return(plugins)
 
+
 def get_download_link(page_link):
     html = getHTML(page_link)
     soup = BeautifulSoup(html, "html.parser")
     try:
-        download_link = soup.findAll("a", {"class": "yith-wcmbs-download-button"})[1]['href']
+        download_link = soup.findAll(
+            "a", {"class": "yith-wcmbs-download-button"})[1]['href']
     except:
         try:
-            download_link = soup.find("a", {"class": "yith-wcmbs-download-button"})['href']
+            download_link = soup.find(
+                "a", {"class": "yith-wcmbs-download-button"})['href']
         except:
             return ""
     return download_link
+
 
 def download_file(link, name):
     name = "plugins/{}.zip".format(name)
     with open("cookie_gpl.txt") as f:
         cookie = f.readline()
     headers = {'User-agent': 'Mozilla/5.0', 'Cookie': cookie, 'DNT': '1'}
-    d_file = requests.get(link, headers = headers)
+    d_file = requests.get(link, headers=headers)
     open(name, "wb").write(d_file.content)
+
 
 def download_file_themes(link, name):
     name = "themes/{}.zip".format(name)
     with open("cookie_gpl.txt") as f:
         cookie = f.readline()
     headers = {'User-agent': 'Mozilla/5.0', 'Cookie': cookie, 'DNT': '1'}
-    d_file = requests.get(link, headers = headers)
+    d_file = requests.get(link, headers=headers)
     open(name, "wb").write(d_file.content)
+
 
 def make_plugins_json():
     plugins = {}
-    plugins['link'] = get_all_plugins("https://www.gplfamily.com/product-category/wordpress-plugins/")
+    plugins['link'] = get_all_plugins(
+        "https://www.gplfamily.com/product-category/wordpress-plugins/")
     with open('plugins.json', 'w') as f:
         json.dump(plugins, f)
+    print("Updated plugins.json")
+
 
 def make_themes_json():
     themes = {}
-    themes['link'] = get_all_plugins("https://www.gplfamily.com/product-category/wordpress-themes/")
+    themes['link'] = get_all_plugins(
+        "https://www.gplfamily.com/product-category/wordpress-themes/")
     with open('themes.json', 'w') as f:
         json.dump(themes, f)
+    print("Updated themes.json")
+
 
 def make_downlinks_json():
     download_file = {}
@@ -98,6 +113,8 @@ def make_downlinks_json():
 
     with open('download_links.json', 'w') as f:
         json.dump(download_file, f)
+    print("Updated download_links.json")
+
 
 def make_downlinks_json_themes():
     download_file = {}
@@ -110,10 +127,12 @@ def make_downlinks_json_themes():
         product = []
         product.append(name)
         product.append(download_link)
-        pprint(product)
+        # pprint(product)
         download_file['data'].append(product)
     with open('download_links_themes.json', 'w') as f:
         json.dump(download_file, f)
+    print("Updated download_links_themes.json")
+
 
 def download_driver():
     with open('download_links.json', 'r') as f:
@@ -122,6 +141,7 @@ def download_driver():
     for download_inf in download_infs:
         pprint(download_inf[0])
         download_file(download_inf[1], download_inf[0])
+
 
 def download_driver_themes():
     with open('download_links_themes.json', 'r') as f:
