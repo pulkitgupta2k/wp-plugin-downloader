@@ -9,6 +9,11 @@ import shutil
 
 def login(user, passwd, driver, site):
     driver.get(f"https://{site}/admin/home/")
+    try:
+        driver.find_element_by_xpath("//*[@id='details-button']").click()
+        driver.find_element_by_xpath("//*[@id='proceed-link']").click()
+    except:
+        pass
     username = driver.find_element_by_id("login_name")
     password = driver.find_element_by_id("passwd")
     username.send_keys(user)
@@ -74,7 +79,9 @@ def upload_theme(name, driver, site):
 
 def upload_driver():
     for site, cred in sites.items():
-        driver = webdriver.Chrome('./chromedriver')
+        options = webdriver.ChromeOptions()
+        options.add_argument('ignore-certificate-errors')
+        driver = webdriver.Chrome('./chromedriver', chrome_options=options)
         login(cred["user"], cred["passwd"], driver, site)
         name = []
         names = glob.glob("plugins/*.zip")
@@ -86,7 +93,9 @@ def upload_driver():
 
 def upload_driver_themes():
     for site, cred in sites.items():
-        driver = webdriver.Chrome('./chromedriver')
+        options = webdriver.ChromeOptions()
+        options.add_argument('ignore-certificate-errors')
+        driver = webdriver.Chrome('./chromedriver', chrome_options=options)
         login(cred["user"], cred["passwd"], driver, site)
         name = []
         names = glob.glob("themes/*.zip")
